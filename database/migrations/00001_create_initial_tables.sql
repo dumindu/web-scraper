@@ -21,7 +21,7 @@ CREATE TABLE "user_auths"
 CREATE TABLE "user_activation_tokens"
 (
     "user_id"          UUID                     NOT NULL,
-    "password"         TEXT                     NOT NULL,
+    "token"            TEXT                     NOT NULL,
     "token_expired_at" TIMESTAMP with time zone NOT NULL,
     PRIMARY KEY ("user_id")
 );
@@ -29,7 +29,7 @@ CREATE TABLE "user_activation_tokens"
 CREATE TABLE "user_reset_password_tokens"
 (
     "user_id"          UUID                     NOT NULL,
-    "password"         TEXT                     NOT NULL,
+    "token"            TEXT                     NOT NULL,
     "token_expired_at" TIMESTAMP with time zone NOT NULL,
     PRIMARY KEY ("user_id")
 );
