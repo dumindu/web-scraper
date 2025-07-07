@@ -10,6 +10,7 @@ import (
 type Conf struct {
 	Server ConfServer
 	DB     ConfDB
+	Mailer MailerConf
 }
 
 type ConfServer struct {
@@ -27,6 +28,15 @@ type ConfDB struct {
 	Password string `env:"DB_PASS,required"`
 	DBName   string `env:"DB_NAME,required"`
 	Debug    bool   `env:"DB_DEBUG,required"`
+}
+
+type MailerConf struct {
+	Host        string `env:"MAILER_HOST,required"`
+	Port        int    `env:"MAILER_PORT,required"`
+	User        string `env:"MAILER_USER,required"`
+	Pass        string `env:"MAILER_PASS,required"`
+	FromNoReply string `env:"MAILER_FROM_NO_REPLY,required"`
+	WebsiteHost string `env:"MAILER_WEBSITE_HOST,required"`
 }
 
 func New() *Conf {

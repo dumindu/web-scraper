@@ -8,6 +8,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      mailhog:
+        condition: service_started
     command: [ "sh", "-c", "/app/bin/dbmigrate up && /app/bin/api" ]
     restart: always
 
@@ -25,4 +27,15 @@ services:
       interval: 3s
       timeout: 5s
       retries: 5
+    restart: always
+
+  mailhog:
+    image: mailhog/mailhog
+    volumes:
+      - ./mailhog.auth:/mailhog.auth
+    environment:
+      MH_AUTH_FILE: /mailhog.auth
+    ports:
+      - "1025:1025"
+      - "8025:8025"
     restart: always

@@ -14,22 +14,35 @@ import (
 
 	"web-scraper.dev/internal/api/router"
 	"web-scraper.dev/internal/config"
+	"web-scraper.dev/internal/mailer"
 	"web-scraper.dev/internal/utils/logger"
 	"web-scraper.dev/internal/utils/validator"
 )
 
 const fmtDBString = "host=%s user=%s password=%s dbname=%s port=%d sslmode=disable"
 
+//	@title			Web Scraper API
+//	@version		1.0
+//	@description	This is a sample RESTful API for a Web Scraper
+
+//	@contact.name	Dumindu Madunuwan
+//	@contact.url	https://www.linkedin.com/in/dumindunuwan
+
+//	@license.name	MIT License
+//	@license.url	https://github.com/dumindu/web-scraper/blob/main/LICENSE
+
+// @servers.url	localhost:8080/v1
 func main() {
 	c := config.New()
 	l := logger.New(c.Server.Debug)
 	v := validator.New()
+	ml := mailerM(&c.Mailer)
 	db, err := gormDB(&c.DB)
 	if err != nil {
 		l.Fatal().Err(err).Msg("DB connection start failure")
 	}
 
-	r := router.New(c.Server.TimeoutRead, c.Server.TimeoutWrite, db, l, v)
+	r := router.New(c.Server.TimeoutRead, c.Server.TimeoutWrite, db, ml, l, v)
 
 	s := &http.Server{
 		Addr:         fmt.Sprintf(":%d", c.Server.Port),
@@ -83,4 +96,21 @@ func gormDB(conf *config.ConfDB) (*gorm.DB, error) {
 
 	dbString := fmt.Sprintf(fmtDBString, conf.Host, conf.Username, conf.Password, conf.DBName, conf.Port)
 	return gorm.Open(postgres.Open(dbString), &gorm.Config{Logger: gormlogger.Default.LogMode(logLevel)})
+}
+
+func mailerM(conf *config.MailerConf) *mailer.Mailer {
+	appMailerConf := &mailer.Conf{
+		Host: conf.Host,
+		Port: conf.Port,
+		User: conf.User,
+		Pass: conf.Pass,
+		Senders: &mailer.Senders{
+			NoReply: conf.FromNoReply,
+		},
+		Links: &mailer.Links{
+			WebsiteHost: conf.WebsiteHost,
+		},
+	}
+
+	return mailer.New(appMailerConf)
 }

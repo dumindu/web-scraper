@@ -11,6 +11,9 @@ var (
 
 	RespJSONEncodeFailure = []byte(`{"error": "json encode failure"}`)
 	RespJSONDecodeFailure = []byte(`{"error": "json decode failure"}`)
+
+	RespHashGenerationFailure = []byte(`{"error": "hash generation failure"}`)
+	RespEmailSendingFailure   = []byte(`{"error": "email sending failure"}`)
 )
 
 type Error struct {

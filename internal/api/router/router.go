@@ -13,10 +13,11 @@ import (
 	"web-scraper.dev/internal/api/handlers/user"
 	"web-scraper.dev/internal/api/router/middleware"
 	"web-scraper.dev/internal/api/router/middleware/requestlog"
+	"web-scraper.dev/internal/mailer"
 	"web-scraper.dev/internal/utils/logger"
 )
 
-func New(hd time.Duration, hdw time.Duration, db *gorm.DB, l *logger.Logger, v *validator.Validate) *chi.Mux {
+func New(hd time.Duration, hdw time.Duration, db *gorm.DB, ml *mailer.Mailer, l *logger.Logger, v *validator.Validate) *chi.Mux {
 	r := chi.NewRouter()
 
 	r.Get("/livez", health.Read)
@@ -35,7 +36,7 @@ func New(hd time.Duration, hdw time.Duration, db *gorm.DB, l *logger.Logger, v *
 		r.Use(middleware.ContentTypeJSON)
 		r.Use(middleware.RequestID)
 
-		userAPI := user.New(db, l, v)
+		userAPI := user.New(db, ml, l, v)
 		r.Method(http.MethodPost, "/users/sign-up", requestlog.NewHandler(userAPI.SignUp, hd, l))
 		r.Method(http.MethodPost, "/users/sign-in", requestlog.NewHandler(userAPI.SignIn, hd, l))
 	})
