@@ -43,3 +43,6 @@ jobs:
 
       - name: Govulncheck
         run: ./.github/workflows/bin/govulncheck ./...
+
+      - name: OpenAPI specification errors
+        run: ./.github/workflows/bin/swag init -g cmd/api/main.go -o . -ot yaml --v3.1 --parseDependency && mv swagger.yaml openapi-v3.1.0.yml
