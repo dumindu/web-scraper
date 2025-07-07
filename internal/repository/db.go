@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 
 	"web-scraper.dev/internal/model"
@@ -34,4 +35,8 @@ type DB interface {
 
 	CreateUser(u *model.User) error
 	ReadUserByEmail(email string) (*model.User, error)
+	ReadUserWithActivationTokenByEmail(email string) (*model.User, error)
+
+	CreateOrUpdateUserActivationTokenByUserId(uat *model.UserActivationToken) error
+	DeleteUserActivationTokenByUserId(userId uuid.UUID) error
 }

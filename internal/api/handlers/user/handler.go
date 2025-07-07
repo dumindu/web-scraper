@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 	"strings"
+	"time"
 
 	v "github.com/go-playground/validator/v10"
 	"golang.org/x/crypto/bcrypt"
@@ -94,6 +95,75 @@ func (a *API) SignUp(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
+}
+
+// Activate godoc
+// @summary Activate user
+// @description Verify the user's email by using the given 6-character long code.
+// @description If the code already expired, a new verification email will be sent with a new code.
+// @tags users
+//
+// @router /users/activate [POST]
+// @produce  json
+// @param email query string true "Email"
+// @param token query string true "Activation code"
+//
+// @success 200
+// @success 400 {object} e.Error
+// @failure 401 {object} e.Error
+// @failure 409 {object} e.Error
+// @failure 500 {object} e.Error
+func (a *API) Activate(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	reqID := ctxutil.RequestID(ctx)
+
+	email := r.URL.Query().Get("email")
+	token := r.URL.Query().Get("token")
+	if email == "" || token == "" {
+		e.BadRequest(w, e.RespInvalidActivationRequest)
+		return
+	}
+
+	user, err := a.db.ReadUserWithActivationTokenByEmail(email)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		a.logger.Error().Str(l.KeyReqID, reqID).Err(err).Msg("")
+		e.ServerError(w, e.RespDBDataAccessFailure)
+		return
+	}
+
+	if user == nil || user.ActivationToken == nil {
+		e.Unauthorized(w, e.RespUnauthorized)
+		return
+	}
+
+	if user.ActivationToken.TokenExpiredAt.Before(time.Now()) {
+		userActivationTokenModel := model.NewUserActivationToken(user.ID)
+		if err := a.db.CreateOrUpdateUserActivationTokenByUserId(userActivationTokenModel); err != nil {
+			a.logger.Error().Str(l.KeyReqID, reqID).Err(err).Msg("")
+			e.ServerError(w, e.RespDBDataUpdateFailure)
+			return
+		}
+
+		if err := a.mailer.ActivationMail(user.Email, userActivationTokenModel.Token); err != nil {
+			a.logger.Error().Str(l.KeyReqID, reqID).Err(err).Msg("")
+			e.ServerError(w, e.RespEmailSendingFailure)
+			return
+		}
+
+		e.Conflict(w, e.RespTokenExpired)
+		return
+	}
+
+	if user.ActivationToken.Token != token {
+		e.BadRequest(w, e.RespTokenInvalid)
+		return
+	}
+
+	if err := a.db.DeleteUserActivationTokenByUserId(user.ID); err != nil {
+		a.logger.Error().Str(l.KeyReqID, reqID).Err(err).Msg("")
+		e.ServerError(w, e.RespDBDataDeleteFailure)
+		return
+	}
 }
 
 func (a *API) SignIn(w http.ResponseWriter, r *http.Request) {

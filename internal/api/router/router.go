@@ -39,6 +39,8 @@ func New(hd time.Duration, hdw time.Duration, db *gorm.DB, ml *mailer.Mailer, l 
 		userAPI := user.New(db, ml, l, v)
 		r.Method(http.MethodPost, "/users/sign-up", requestlog.NewHandler(userAPI.SignUp, hd, l))
 		r.Method(http.MethodPost, "/users/sign-in", requestlog.NewHandler(userAPI.SignIn, hd, l))
+
+		r.Method(http.MethodPost, "/users/activate", requestlog.NewHandler(userAPI.Activate, hd, l))
 	})
 
 	return r
