@@ -36,6 +36,7 @@ type DB interface {
 	CreateUser(u *model.User) error
 	ReadUserByEmail(email string) (*model.User, error)
 	ReadUserWithActivationTokenByEmail(email string) (*model.User, error)
+	ReadUserWithActivationTokenAndUserAuthByEmail(email string) (*model.User, error)
 
 	CreateOrUpdateUserActivationTokenByUserId(uat *model.UserActivationToken) error
 	DeleteUserActivationTokenByUserId(userId uuid.UUID) error

@@ -8,9 +8,10 @@ import (
 )
 
 type Conf struct {
-	Server ConfServer
-	DB     ConfDB
-	Mailer MailerConf
+	Server     ConfServer
+	DB         ConfDB
+	Mailer     MailerConf
+	Ed25519JWT Ed25519JWTConf
 }
 
 type ConfServer struct {
@@ -37,6 +38,15 @@ type MailerConf struct {
 	Pass        string `env:"MAILER_PASS,required"`
 	FromNoReply string `env:"MAILER_FROM_NO_REPLY,required"`
 	WebsiteHost string `env:"MAILER_WEBSITE_HOST,required"`
+}
+
+type Ed25519JWTConf struct {
+	AccessTokenLifetime    time.Duration `env:"ACCESS_TOKEN_LIFETIME,required"`
+	AccessTokenPublicKey   string        `env:"ACCESS_TOKEN_PUBLIC_KEY,required"`
+	AccessTokenPrivateKey  string        `env:"ACCESS_TOKEN_PRIVATE_KEY,required"`
+	RefreshTokenLifeTime   time.Duration `env:"REFRESH_TOKEN_LIFETIME,required"`
+	RefreshTokenPublicKey  string        `env:"REFRESH_TOKEN_PUBLIC_KEY,required"`
+	RefreshTokenPrivateKey string        `env:"REFRESH_TOKEN_PRIVATE_KEY,required"`
 }
 
 func New() *Conf {

@@ -1,5 +1,16 @@
 components:
   schemas:
+    internal_api_handlers_user.FormSignIn:
+      properties:
+        email:
+          type: string
+        password:
+          minLength: 8
+          type: string
+      required:
+      - email
+      - password
+      type: object
     internal_api_handlers_user.FormSignUp:
       properties:
         confirmPassword:
@@ -13,6 +24,13 @@ components:
       - confirmPassword
       - email
       - password
+      type: object
+    internal_api_handlers_user.RespTokens:
+      properties:
+        access:
+          type: string
+        refresh:
+          type: string
       type: object
     web-scraper_dev_internal_api_errors.Error:
       properties:
@@ -92,6 +110,62 @@ paths:
                 $ref: '#/components/schemas/web-scraper_dev_internal_api_errors.Error'
           description: Internal Server Error
       summary: Activate user
+      tags:
+      - users
+  /users/sign-in:
+    post:
+      description: Login by using an email and a password.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_api_handlers_user.FormSignIn'
+        description: SignIn Form
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/internal_api_handlers_user.RespTokens'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web-scraper_dev_internal_api_errors.Error'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web-scraper_dev_internal_api_errors.Error'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web-scraper_dev_internal_api_errors.Error'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web-scraper_dev_internal_api_errors.Error'
+          description: Conflict
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web-scraper_dev_internal_api_errors.Error'
+          description: Unprocessable Entity
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web-scraper_dev_internal_api_errors.Error'
+          description: Internal Server Error
+      summary: User Signin
       tags:
       - users
   /users/sign-up:

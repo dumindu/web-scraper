@@ -1,6 +1,7 @@
 package user
 
 import (
+	"encoding/json"
 	"errors"
 	"net/http"
 	"strings"
@@ -15,6 +16,7 @@ import (
 	"web-scraper.dev/internal/model"
 	"web-scraper.dev/internal/repository"
 	"web-scraper.dev/internal/utils/ctxutil"
+	"web-scraper.dev/internal/utils/jwtutil"
 	l "web-scraper.dev/internal/utils/logger"
 )
 
@@ -166,11 +168,70 @@ func (a *API) Activate(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// SignIn godoc
+// @summary User Signin
+// @description Login by using an email and a password.
+// @tags users
+//
+// @router /users/sign-in [POST]
+// @accept json
+// @produce json
+// @param body body FormSignIn true "SignIn Form"
+//
+// @success 200 {object} RespTokens
+// @failure 400 {object} e.Error
+// @failure 401 {object} e.Error
+// @failure 403 {object} e.Error
+// @failure 409 {object} e.Error
+// @failure 422 {object} e.Error
+// @failure 500 {object} e.Error
 func (a *API) SignIn(w http.ResponseWriter, r *http.Request) {
 	reqID := ctxutil.RequestID(r.Context())
 
 	form := &FormSignIn{}
 	if e.JSONBindAndValidateErrorHandled(w, r, a.logger, a.validator, form, reqID) {
+		return
+	}
+
+	user, err := a.db.ReadUserWithActivationTokenAndUserAuthByEmail(strings.ToLower(form.Email))
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		a.logger.Error().Str(l.KeyReqID, reqID).Err(err).Msg("")
+		e.ServerError(w, e.RespDBDataAccessFailure)
+		return
+	}
+
+	if user == nil || user.Auth == nil {
+		e.Unauthorized(w, e.RespUnauthorized)
+		return
+	}
+
+	if user.ActivationToken != nil {
+		e.Forbidden(w, e.RespPendingActivation)
+		return
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Auth.Password), []byte(form.Password)); err != nil {
+		if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
+			e.Unauthorized(w, e.RespFalseAuthentication)
+			return
+		}
+
+		a.logger.Error().Str(l.KeyReqID, reqID).Err(err).Msg("")
+		e.ServerError(w, e.RespHashGenerationFailure)
+		return
+	}
+
+	accessToken, refreshToken, err := jwtutil.NewAccessTokenAndRefreshToken(user.ID.String(), user.Email)
+	if err != nil {
+		a.logger.Error().Str(l.KeyReqID, reqID).Err(err).Msg("")
+		e.ServerError(w, e.RespJWTTokenGenerationFailure)
+		return
+	}
+
+	tokens := RespTokens{Access: accessToken, Refresh: refreshToken}
+	if err := json.NewEncoder(w).Encode(tokens); err != nil {
+		a.logger.Error().Str(l.KeyReqID, reqID).Err(err).Msg("")
+		e.ServerError(w, e.RespJSONEncodeFailure)
 		return
 	}
 }
