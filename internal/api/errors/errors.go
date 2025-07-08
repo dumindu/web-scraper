@@ -23,6 +23,8 @@ var (
 	RespUnauthorized             = []byte(`{"error": "unauthorized"}`)
 	RespFalseAuthentication      = []byte(`{"error": "false authentication"}`)
 	RespPendingActivation        = []byte(`{"error": "pending activation"}`)
+
+	RespInvalidID = []byte(`{"error": "invalid ID"}`)
 )
 
 type Error struct {
