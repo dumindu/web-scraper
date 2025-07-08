@@ -13,13 +13,16 @@ var (
 	RespJSONEncodeFailure = []byte(`{"error": "json encode failure"}`)
 	RespJSONDecodeFailure = []byte(`{"error": "json decode failure"}`)
 
-	RespHashGenerationFailure = []byte(`{"error": "hash generation failure"}`)
-	RespEmailSendingFailure   = []byte(`{"error": "email sending failure"}`)
+	RespHashGenerationFailure     = []byte(`{"error": "hash generation failure"}`)
+	RespJWTTokenGenerationFailure = []byte(`{"error": "jwt token generation failure"}`)
+	RespEmailSendingFailure       = []byte(`{"error": "email sending failure"}`)
 
 	RespInvalidActivationRequest = []byte(`{"error": "invalid activation request"}`)
 	RespTokenExpired             = []byte(`{"error": "token expired"}`)
 	RespTokenInvalid             = []byte(`{"error": "invalid token"}`)
 	RespUnauthorized             = []byte(`{"error": "unauthorized"}`)
+	RespFalseAuthentication      = []byte(`{"error": "false authentication"}`)
+	RespPendingActivation        = []byte(`{"error": "pending activation"}`)
 )
 
 type Error struct {
@@ -42,6 +45,11 @@ func ServerError(w http.ResponseWriter, error []byte) {
 
 func Unauthorized(w http.ResponseWriter, error []byte) {
 	w.WriteHeader(http.StatusUnauthorized)
+	w.Write(error)
+}
+
+func Forbidden(w http.ResponseWriter, error []byte) {
+	w.WriteHeader(http.StatusForbidden)
 	w.Write(error)
 }
 

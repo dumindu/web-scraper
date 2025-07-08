@@ -10,6 +10,7 @@ import (
 	"gorm.io/gorm"
 
 	"web-scraper.dev/internal/api/handlers/health"
+	"web-scraper.dev/internal/api/handlers/keyword"
 	"web-scraper.dev/internal/api/handlers/user"
 	"web-scraper.dev/internal/api/router/middleware"
 	"web-scraper.dev/internal/api/router/middleware/requestlog"
@@ -41,6 +42,12 @@ func New(hd time.Duration, hdw time.Duration, db *gorm.DB, ml *mailer.Mailer, l 
 		r.Method(http.MethodPost, "/users/sign-in", requestlog.NewHandler(userAPI.SignIn, hd, l))
 
 		r.Method(http.MethodPost, "/users/activate", requestlog.NewHandler(userAPI.Activate, hd, l))
+
+		r.Route("/", func(r chi.Router) {
+			r.Use(middleware.JwtAuthentication)
+
+			r.Method(http.MethodGet, "/keywords", requestlog.NewHandler(keyword.Read, hd, l))
+		})
 	})
 
 	return r

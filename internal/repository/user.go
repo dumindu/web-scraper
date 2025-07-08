@@ -23,3 +23,14 @@ func (db *Db) ReadUserWithActivationTokenByEmail(email string) (*model.User, err
 
 	return user, nil
 }
+
+func (db *Db) ReadUserWithActivationTokenAndUserAuthByEmail(email string) (*model.User, error) {
+	user := &model.User{}
+	if err := db.Preload("ActivationToken").
+		Preload("Auth").
+		Where("email = ?", email).First(user).Error; err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}

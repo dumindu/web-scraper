@@ -2,7 +2,10 @@ package ctxutil
 
 import "context"
 
-const keyRequestID key = "requestID"
+const (
+	keyRequestID key = "requestID"
+	keyUser      key = "user"
+)
 
 type key string
 
