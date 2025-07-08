@@ -12,6 +12,7 @@ type Conf struct {
 	DB         ConfDB
 	Mailer     MailerConf
 	Ed25519JWT Ed25519JWTConf
+	RedisHosts string `env:"REDIS_HOSTS,required"`
 }
 
 type ConfServer struct {
@@ -60,6 +61,22 @@ func New() *Conf {
 
 func NewDB() *ConfDB {
 	var c ConfDB
+	if err := env.Parse(&c); err != nil {
+		log.Fatalf("Failed to decode: %s", err)
+	}
+
+	return &c
+}
+
+// --- worker ---
+
+type WorkerConf struct {
+	DB         ConfDB
+	RedisHosts string `env:"REDIS_HOSTS,required"`
+}
+
+func NewWorkerConf() *WorkerConf {
+	var c WorkerConf
 	if err := env.Parse(&c); err != nil {
 		log.Fatalf("Failed to decode: %s", err)
 	}
