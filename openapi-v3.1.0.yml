@@ -111,11 +111,53 @@ paths:
       summary: Get the list of keywords
       tags:
       - keywords
+    post:
+      description: Upload the keywords CSV file to scrape on web
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: file
+          text/csv:
+            schema:
+              type: file
+        description: CSV file with keywords
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Accepted
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web-scraper_dev_internal_api_errors.Error'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web-scraper_dev_internal_api_errors.Error'
+          description: Unauthorized
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web-scraper_dev_internal_api_errors.Error'
+          description: Internal Server Error
+      security:
+      - BearerToken: []
+      summary: Upload the keywords CSV file
+      tags:
+      - keywords
   /keywords/{id}:
     get:
       description: Get the result of a keyword uploaded by current user
       parameters:
-      - description: Payment ID in uuid format
+      - description: Keyword ID in uuid format
         in: path
         name: id
         required: true

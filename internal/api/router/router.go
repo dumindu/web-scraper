@@ -7,6 +7,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
 	"github.com/go-playground/validator/v10"
+	"github.com/hibiken/asynq"
 	"gorm.io/gorm"
 
 	"web-scraper.dev/internal/api/handlers/health"
@@ -18,7 +19,7 @@ import (
 	"web-scraper.dev/internal/utils/logger"
 )
 
-func New(hd time.Duration, hdw time.Duration, db *gorm.DB, ml *mailer.Mailer, l *logger.Logger, v *validator.Validate) *chi.Mux {
+func New(hd time.Duration, hdw time.Duration, db *gorm.DB, ml *mailer.Mailer, l *logger.Logger, v *validator.Validate, asyq *asynq.Client) *chi.Mux {
 	r := chi.NewRouter()
 
 	r.Get("/livez", health.Read)
@@ -46,7 +47,7 @@ func New(hd time.Duration, hdw time.Duration, db *gorm.DB, ml *mailer.Mailer, l 
 		r.Route("/", func(r chi.Router) {
 			r.Use(middleware.JwtAuthentication)
 
-			keywordAPI := keyword.New(db, l, v)
+			keywordAPI := keyword.New(db, l, v, asyq)
 			r.Method(http.MethodGet, "/keywords", requestlog.NewHandler(keywordAPI.GetKeywords, hd, l))
 			r.Method(http.MethodGet, "/keywords/{id}", requestlog.NewHandler(keywordAPI.GetKeyword, hd, l))
 

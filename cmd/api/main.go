@@ -6,8 +6,10 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 
+	"github.com/hibiken/asynq"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	gormlogger "gorm.io/gorm/logger"
@@ -42,7 +44,15 @@ func main() {
 		l.Fatal().Err(err).Msg("DB connection start failure")
 	}
 
-	r := router.New(c.Server.TimeoutRead, c.Server.TimeoutWrite, db, ml, l, v)
+	redisClusterAddresses := strings.Split(c.RedisHosts, ",")
+	if len(redisClusterAddresses) == 0 {
+		l.Fatal().Msg("Redis cluster connection failure")
+	}
+	asyq := asynq.NewClient(asynq.RedisClusterClientOpt{
+		Addrs: redisClusterAddresses,
+	})
+
+	r := router.New(c.Server.TimeoutRead, c.Server.TimeoutWrite, db, ml, l, v, asyq)
 
 	s := &http.Server{
 		Addr:         fmt.Sprintf(":%d", c.Server.Port),

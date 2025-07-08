@@ -24,7 +24,9 @@ var (
 	RespFalseAuthentication      = []byte(`{"error": "false authentication"}`)
 	RespPendingActivation        = []byte(`{"error": "pending activation"}`)
 
-	RespInvalidID = []byte(`{"error": "invalid ID"}`)
+	RespInvalidID                = []byte(`{"error": "invalid ID"}`)
+	RespInvalidFile              = []byte(`{"error": "invalid file"}`)
+	RespInvalidFileExceedMaxRows = []byte(`{"error": "invalid file: exceed maximum rows"}`)
 )
 
 type Error struct {
