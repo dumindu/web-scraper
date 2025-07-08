@@ -40,4 +40,7 @@ type DB interface {
 
 	CreateOrUpdateUserActivationTokenByUserId(uat *model.UserActivationToken) error
 	DeleteUserActivationTokenByUserId(userId uuid.UUID) error
+
+	ListKeywordsByUserId(userID uuid.UUID) (model.Keywords, error)
+	ReadKeywordByIdAndUserId(id uuid.UUID, userId uuid.UUID) (*model.Keyword, error)
 }

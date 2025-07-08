@@ -46,7 +46,11 @@ func New(hd time.Duration, hdw time.Duration, db *gorm.DB, ml *mailer.Mailer, l 
 		r.Route("/", func(r chi.Router) {
 			r.Use(middleware.JwtAuthentication)
 
-			r.Method(http.MethodGet, "/keywords", requestlog.NewHandler(keyword.Read, hd, l))
+			keywordAPI := keyword.New(db, l, v)
+			r.Method(http.MethodGet, "/keywords", requestlog.NewHandler(keywordAPI.GetKeywords, hd, l))
+			r.Method(http.MethodGet, "/keywords/{id}", requestlog.NewHandler(keywordAPI.GetKeyword, hd, l))
+
+			r.Method(http.MethodPost, "/keywords", requestlog.NewHandler(keywordAPI.UploadKeywords, hd, l))
 		})
 	})
 
