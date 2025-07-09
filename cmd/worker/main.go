@@ -27,12 +27,12 @@ func main() {
 		l.Fatal().Err(err).Msg("DB connection start failure")
 	}
 
-	redisClusterAddresses := strings.Split(c.RedisHosts, ",")
-	if len(redisClusterAddresses) == 0 {
-		l.Fatal().Msg("Redis cluster connection failure")
+	redisHosts := strings.Split(c.RedisHosts, ",")
+	if len(redisHosts) == 0 {
+		l.Fatal().Msg("Redis connection failure")
 	}
-	redisConnOpt := asynq.RedisClusterClientOpt{
-		Addrs: redisClusterAddresses,
+	redisConnOpt := asynq.RedisClientOpt{
+		Addr: redisHosts[0],
 	}
 
 	scrapeWorker := workers.NewScrapeWorker(redisConnOpt, db, l)

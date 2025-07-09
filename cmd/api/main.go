@@ -44,12 +44,12 @@ func main() {
 		l.Fatal().Err(err).Msg("DB connection start failure")
 	}
 
-	redisClusterAddresses := strings.Split(c.RedisHosts, ",")
-	if len(redisClusterAddresses) == 0 {
-		l.Fatal().Msg("Redis cluster connection failure")
+	redisHosts := strings.Split(c.RedisHosts, ",")
+	if len(redisHosts) == 0 {
+		l.Fatal().Msg("Redis connection failure")
 	}
-	asyq := asynq.NewClient(asynq.RedisClusterClientOpt{
-		Addrs: redisClusterAddresses,
+	asyq := asynq.NewClient(asynq.RedisClientOpt{
+		Addr: redisHosts[0],
 	})
 
 	r := router.New(c.Server.TimeoutRead, c.Server.TimeoutWrite, db, ml, l, v, asyq)

@@ -54,17 +54,11 @@ services:
     restart: always
 
   redis:
-    image: neohq/redis-cluster:latest # for amd64 use grokzen/redis-cluster:latest
-    volumes:
-      - ./redis-cluster.tmpl:/redis-conf/redis-cluster.tmpl
-    environment:
-      # IP: 0.0.0.0 # if needed to connect from a local Go app(not running Docker)
-      MASTERS: 3
-      SLAVES_PER_MASTER: 1
+    image: redis:8-alpine
     ports:
-      - "7000-7005:7000-7005"
+      - "6379:6379"
     healthcheck:
-      test: [ "CMD-SHELL", "redis-cli -p 7005 ping" ]
+      test: [ "CMD-SHELL", "redis-cli ping" ]
       interval: 10s
       timeout: 5s
       retries: 5

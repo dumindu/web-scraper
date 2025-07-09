@@ -142,6 +142,12 @@ func (a *API) UploadKeywords(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	reqID, ctxUser := ctxutil.RequestID(ctx), ctxutil.UserFromCtx(ctx)
 
+	if err := r.ParseMultipartForm(32 << 20); err != nil {
+		a.logger.Error().Str(l.KeyReqID, reqID).Err(err).Msg("")
+		e.BadRequest(w, e.RespInvalidFile)
+		return
+	}
+
 	file, _, err := r.FormFile("file")
 	if err != nil {
 		e.BadRequest(w, e.RespInvalidFile)

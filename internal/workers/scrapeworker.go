@@ -36,13 +36,13 @@ type ScrapeWorker struct {
 	logger *l.Logger
 }
 
-func NewScrapeWorker(redisOpt asynq.RedisClusterClientOpt, db *gorm.DB, logger *l.Logger) *ScrapeWorker {
+func NewScrapeWorker(redisOpt asynq.RedisClientOpt, db *gorm.DB, logger *l.Logger) *ScrapeWorker {
 	srv := asynq.NewServer(
 		redisOpt,
 		asynq.Config{
 			Concurrency: 10,
 			Queues: map[string]int{
-				tasks.TypeScrapeKeyword: 10,
+				"default": 10,
 			},
 		},
 	)
