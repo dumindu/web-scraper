@@ -1,0 +1,10 @@
+<div class="details-panel">
+  <div class="details-header">
+    <button class="btn btn-ghost" onclick="goBack()">← Back</button>
+    <h3>{{ title }}</h3>
+    <slot name="actions"></slot>
+  </div>
+  <div class="details-content">
+    <slot></slot>
+  </div>
+</div>

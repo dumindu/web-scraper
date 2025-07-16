@@ -1,0 +1,9 @@
+<div class="main-panel">
+  <div class="panel-header">
+    <h2>{{ title }}</h2>
+    <slot name="actions"></slot>
+  </div>
+  <div class="panel-content">
+    <slot></slot>
+  </div>
+</div>

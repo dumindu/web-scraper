@@ -1,0 +1,29 @@
+<section>
+    <header>
+        <h1>Sign In</h1>
+    </header>
+
+    <div id="app-container-body">
+        <form id="login-form">
+          <div class="form-error" id="login-error-message" style="display: none;"></div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-input" required placeholder="Enter your email">
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-input" required minlength="8" placeholder="Enter your password">
+          </div>
+
+          <div class="form-group">
+            <button type="button" onclick="handleSignIn(event)">Sign In</button>
+          </div>
+        </form>
+
+        <div class="form-group">
+            <strong>Don't have an account? <a href="/signup" onclick="window.navigateTo('/signup'); return false;">Sign up</a></strong>
+        </div>
+    </div>
+</section>

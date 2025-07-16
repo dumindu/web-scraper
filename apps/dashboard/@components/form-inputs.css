@@ -1,0 +1,64 @@
+.form-group {
+  margin-bottom: var(--padding_x2);
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: var(--padding_x2);
+  font-weight: 600;
+}
+
+.form-group button, .form-group .btn {
+  display: flex;
+  padding: var(--padding);
+  background: var(--foreground);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  gap: var(--padding);
+  cursor: pointer;
+  color: var(--color-nav);
+}
+
+.form-group button:hover, .form-group .btn:hover {
+  background: var(--foreground-hover);
+}
+
+.form-input {
+  width: 100%;
+  padding: var(--padding);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  position: relative;
+  color: var(--color-nav);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  transform: translateY(-1px);
+}
+
+.form-input:hover {
+  border-color: rgba(37, 99, 235, 0.3);
+}
+
+.form-input::placeholder {
+  color: var(--color-fade);
+}
+
+.form-error {
+  color: var(--error);
+  font-size: 0.825rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.05));
+  border-radius: 8px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  backdrop-filter: blur(10px);
+  animation: slideIn 0.3s ease;
+}
+

@@ -1,0 +1,12 @@
+<div class="app-layout">
+  <nav id="top-nav" class="form-group">
+    <a href="/dashboard" class="btn">Dashboard</a>
+    <a href="/keywords" class="btn">Keywords</a>
+    <a href="/upload" class="btn">Upload</a>
+    <button class="nav-logout btn" onclick="handleLogout()">Logout</button>
+  </nav>
+
+  <main class="app-main">
+    <slot></slot>
+  </main>
+</div>

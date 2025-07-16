@@ -1,0 +1,49 @@
+<div class="keyword-detail-screen">
+  <div class="screen-header">
+    <button class="btn btn-ghost" onclick="goBack()">← Back to Keywords</button>
+    <h1 id="keyword-title">Keyword Details</h1>
+  </div>
+  
+  <div class="keyword-detail-card">
+    <div class="detail-header">
+      <div class="detail-status">
+        <span class="status-badge" id="status-badge">Loading...</span>
+      </div>
+      <div class="detail-stats">
+        <div class="stat-item">
+          <span class="stat-label">Links Found:</span>
+          <span class="stat-value" id="link-count">-</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Ads Found:</span>
+          <span class="stat-value" id="ad-count">-</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="detail-error" id="error-section" style="display: none;">
+      <h3>Error Details</h3>
+      <div class="error-message" id="error-message"></div>
+    </div>
+    
+    <div class="detail-content">
+      <div class="content-tabs">
+        <button class="tab-button active" onclick="showTab('html')">HTML Content</button>
+        <button class="tab-button" onclick="showTab('raw')">Raw Data</button>
+      </div>
+      
+      <div class="tab-content">
+        <div class="tab-panel active" id="html-tab">
+          <div class="html-preview" id="html-preview">
+            <div class="loading">Loading content...</div>
+          </div>
+        </div>
+        
+        <div class="tab-panel" id="raw-tab">
+          <pre class="raw-data" id="raw-data"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,6 @@
+<div class="loading-screen">
+  <div class="loading-message">
+    <h2>Loading WebScraper...</h2>
+    <p>Please wait while we set up your dashboard.</p>
+  </div>
+</div>

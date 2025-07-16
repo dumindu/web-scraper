@@ -1,0 +1,43 @@
+<div class="dashboard-screen">
+  <div class="dashboard-header">
+    <h1>Dashboard</h1>
+    <p>Welcome to your web scraper dashboard</p>
+  </div>
+  
+  <div class="dashboard-stats">
+    <div class="stat-card">
+      <h3>Total Keywords</h3>
+      <span class="stat-value" id="total-keywords">0</span>
+    </div>
+    
+    <div class="stat-card">
+      <h3>Completed</h3>
+      <span class="stat-value" id="completed-keywords">0</span>
+    </div>
+    
+    <div class="stat-card">
+      <h3>Processing</h3>
+      <span class="stat-value" id="processing-keywords">0</span>
+    </div>
+    
+    <div class="stat-card">
+      <h3>Failed</h3>
+      <span class="stat-value" id="failed-keywords">0</span>
+    </div>
+  </div>
+  
+  <div class="dashboard-actions">
+    <a href="/upload" class="btn btn-primary" onclick="window.navigateTo('/upload'); return false;">Upload Keywords</a>
+    <a href="/keywords" class="btn btn-secondary" onclick="window.navigateTo('/keywords'); return false;">View All Keywords</a>
+  </div>
+  
+  <div class="dashboard-content">
+    <div class="recent-keywords">
+      <h2>Recent Keywords</h2>
+      <div id="recent-keywords-list">
+        <div class="loading">Loading...</div>
+      </div>
+    </div>
+  </div>
+</div>
+

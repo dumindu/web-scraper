@@ -1,0 +1,20 @@
+title: Web Scraper
+description: Web scraper dashboard for keyword management and results
+author: Dumindu Madunuwan
+
+port: 8081
+generator: ~
+
+globals: ["@globals", "@components", "view"]
+
+favicon: /img/icon/favicon/favicon.ico
+
+#css:
+#  "/dashboard": ["@components/dashboard.css"]
+#  "/keywords": ["@components/table.css"]
+#  "/upload": ["@components/form-inputs.css"]
+#  "/keywords/:id": ["@components/table.css"]
+
+proxy:
+  - from: /api
+    to: http://localhost:8080/v1

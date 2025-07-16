@@ -1,0 +1,45 @@
+<div class="upload-screen">
+  <div class="screen-header">
+    <h1>Upload Keywords</h1>
+    <p>Upload a CSV file with keywords to scrape</p>
+  </div>
+  
+  <div class="upload-card">
+    <form class="upload-form" onsubmit="handleUpload(event)">
+      <div class="upload-area" id="upload-area">
+        <div class="upload-content">
+          <div class="upload-icon">📁</div>
+          <h3>Drop your CSV file here or click to browse</h3>
+          <p>Supports CSV files with keywords in the first column</p>
+          <input type="file" id="file-input" accept=".csv" onchange="handleFileSelect(event)">
+        </div>
+      </div>
+      
+      <div class="file-info" id="file-info" style="display: none;">
+        <div class="file-details">
+          <span class="file-name" id="file-name"></span>
+          <span class="file-size" id="file-size"></span>
+        </div>
+        <button type="button" class="btn btn-sm btn-secondary" onclick="clearFile()">Remove</button>
+      </div>
+      
+      <div class="form-error" id="upload-error-message" style="display: none;"></div>
+      
+      <div class="upload-actions">
+        <button type="submit" class="btn btn-primary" id="upload-button" disabled>Upload Keywords</button>
+        <a href="/keywords" class="btn btn-secondary" onclick="window.navigateTo('/keywords'); return false;">Cancel</a>
+      </div>
+    </form>
+  </div>
+  
+  <div class="upload-instructions">
+    <h3>CSV Format Instructions</h3>
+    <ul>
+      <li>First column should contain keywords (one per row)</li>
+      <li>File should be in CSV format (.csv)</li>
+      <li>Maximum file size: 10MB</li>
+      <li>Duplicate keywords will be ignored</li>
+    </ul>
+  </div>
+</div>
+

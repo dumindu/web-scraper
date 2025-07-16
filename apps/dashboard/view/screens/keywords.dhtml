@@ -1,0 +1,39 @@
+<section>
+    <header>
+        <h1>Keywords</h1>
+        <p><a href="/upload" class="btn btn-primary" onclick="window.navigateTo('/upload'); return false;">Upload Keywords</a></p>
+    </header>
+
+    <div id="app-container-body">
+        <div class="keywords-filters">
+            <div class="filter-group">
+              <label for="status-filter">Filter by Status:</label>
+              <select id="status-filter" class="form-select" onchange="filterKeywords()">
+                <option value="">All</option>
+                <option value="completed">Completed</option>
+                <option value="processing">Processing</option>
+                <option value="failed">Failed</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label for="search-filter">Search:</label>
+              <input type="text" id="search-filter" class="form-input" placeholder="Search keywords..." oninput="filterKeywords()">
+            </div>
+          </div>
+
+          <div class="keywords-table">
+            <div class="table-header">
+              <div class="table-cell">Keyword</div>
+              <div class="table-cell">Status</div>
+              <div class="table-cell">Links</div>
+              <div class="table-cell">Ads</div>
+              <div class="table-cell">Actions</div>
+            </div>
+
+            <div id="keywords-list">
+              <div class="loading">Loading keywords...</div>
+            </div>
+          </div>
+  </div>
+</section>

@@ -15,6 +15,14 @@ services:
     command: [ "sh", "-c", "/app/bin/dbmigrate up && /app/bin/api" ]
     restart: always
 
+  ui:
+    build: ./apps/dashboard
+    ports:
+      - "8081:8081"
+    depends_on:
+      - app
+    restart: always
+
   worker:
     build: .
     env_file: .env
