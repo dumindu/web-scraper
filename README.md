@@ -107,3 +107,49 @@ Credits go to [leemunroe/responsive-html-email-template](https://github.com/leem
 ├── file.csv
 └── README.md
 ```
+
+## Screenshots
+
+> 💡 Whole website support light/ dark themes.
+
+- Sign up
+
+![sign-up.png](assets/sign-up.png)
+
+![redirect-user-exists.png](assets/redirect-user-exists.png)
+
+- Activation Code
+
+![activate-code.png](assets/activate-code.png)
+
+![redirect-after-activation.png](assets/redirect-after-activation.png)
+
+- Dashboard
+
+![dashboard.png](assets/dashboard.png)
+
+![dashboard-widgets.png](assets/dashboard-widgets.png)
+
+- Keywords
+
+![keywords.png](assets/keywords.png)
+
+![keywords-search.png](assets/keywords-search.png)
+
+![keywords-no-record.png](assets/keywords-no-record.png)
+
+- Upload
+
+![upload.png](assets/upload.png)
+
+![upload-uploading.png](assets/upload-uploading.png)
+
+- Dark mode
+
+![sign-in-dark.png](assets/sign-in-dark.png)
+
+![sign-in-light.png](assets/sign-in-light.png)
+
+- Logs
+
+![docker-logs.png](assets/docker-logs.png)
